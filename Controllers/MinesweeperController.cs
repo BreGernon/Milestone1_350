@@ -34,7 +34,7 @@ namespace Milestone1_350.Controllers
         {
             int bN = int.Parse(buttonNumber);
 
-            buttons.ElementAt(bN).ButtonState = (buttons.ElementAt(bN).ButtonState + 1) % 4;
+            buttons.ElementAt(bN).ButtonState = (buttons.ElementAt(bN).ButtonState + 1) % 3;
 
             return View("Index", buttons);
         }
