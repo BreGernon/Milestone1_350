@@ -2,6 +2,85 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"]</title>
+        <link rel="stylesheet" href="~/css/site.css" />
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+            .header h1 {
+                font-size: 3rem;
+                color: #007bff;
+            }
+
+        .description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .buttons a {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+            .buttons a:hover {
+                background-color: #0056b3;
+            }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1 class="display-4">Welcome to Minesweeper</h1>
+            </div>
+            <div class="description">
+                <p>Test your logic and strategy skills with our classic Minesweeper game! Clear the board without detonating any mines.</p>
+            </div>
+            <div class="buttons">
+                <a href="/Login">Login to Play</a>
+                <p>- OR -</p>
+                <a href="Register">Register to Play </a>
+                <br />
+                <hr />
+                <br />
+                <a href="/Home/HowToPlay">How to Play</a>
+            </div>
+            <div class="footer">
+                <p>&copy; 2024 Minesweeper: Breanna Gernon, Daniel Rajotte, Rodrigo Martinez. CST-350</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "How to Play";
+}
+
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"]</title>
+        <link rel="stylesheet" href="~/css/site.css" />
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #343a40;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .header {
+                margin-bottom: 40px;
+                text-align: center;
+            }
+
+                .header h1 {
+                    font-size: 2.5rem;
+                    color: #007bff;
+                }
+
+            .content {
+                font-size: 1.2rem;
+            }
+
+                .content h2 {
+                    font-size: 1.5rem;
+                    margin-top: 20px;
+                    color: #0056b3;
+                }
+
+                .content ul {
+                    margin-left: 20px;
+                }
+
+                    .content ul li {
+                        margin-bottom: 10px;
+                    }
+
+            .footer {
+                margin-top: 50px;
+                text-align: center;
+                font-size: 0.9rem;
+                color: #6c757d;
+            }
+        </style>
+     </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>How to Play Minesweeper</h1>
+            </div>
+            <div class="content">
+                <h2>Objective</h2>
+                <p>The objective of Minesweeper is to clear a rectangular board containing hidden mines without detonating any of them, with the help of clues about the number of neighboring mines in each field.</p>
+                
+                <h2>Gameplay</h2>
+                <ul>
+                    <li>Click on a cell to reveal it. If it's a mine, you lose the game.</li>
+                    <li>If the cell is not a mine, a number appears indicating how many mines are adjacent to (around) that cell. </li>
+                    <li>Use the numbers to locate the mines and mark them with a flag</li>
+                    <li>Right-click on a cell to place or remove a flag, indicating a suspected mine location.</li>
+                    <li>Clear all the non-mine cells to win the game.</li>
+                </ul>
+
+
+                <h2>Tips and Strategies</h2>
+                    <ul>
+                        <li>Start clicking cells in a corner or edge to reduce the chances of hitting a mine on your first click.</li>
+                        <li>If you uncover a "1", look for safe cells adjacent to it. If there's only one hidden cell next to it, it must be a mine.</li>
+                        <li>Use patterns and logical deduction to figure out where mines are located.</li>
+                        <li>Remember that the first click is always safe and will never be a mine.</li>
+                    </ul>
+            </div>
+            <div class="footer">
+                <p>&copy; 2024 Minesweeper: Breanna Gernon, Daniel Rajotte, Rodrigo Martinez. CST-350</p>
+            </div>
+        </div>
+    </body>
+</html>
