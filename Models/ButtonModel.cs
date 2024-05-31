@@ -7,11 +7,12 @@
         public int ButtonState { get; set; }
         public int NumberOfNeighbors { get; set; }
 
-        public ButtonModel(int row, int col, int buttonState)
+        public ButtonModel(int row, int col, int buttonState, int numberOfNeighbors)
         {
             Row = row;
             Col = col;
             ButtonState = buttonState;
+            NumberOfNeighbors = numberOfNeighbors;
         }
     }
 }
