@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 
 namespace Milestone1_350.Models
 {
     [Serializable()]
     public class BoardModel
     {
-
         public string BoardId { get; set; }
         public int Size { get; set; }
         public CellModel[,] Grid { get; set; }
@@ -18,14 +17,11 @@ namespace Milestone1_350.Models
             Grid = new CellModel[Size, Size];
             SetupLiveNeighbors();
         }
+
         public BoardModel(int difficulty, int size = 16)
         {
             Size = size;
-            // Difficulty adds a bit of an extra kick, for Moderate and Difficult settings
-            // 10% of board is bombs for Easy
-            //  With an added 4% or 20% percent added on top of that, depending
             Difficulty = 10 + (40 * (difficulty / 10));
-
             Grid = new CellModel[Size, Size];
             SetupLiveNeighbors();
         }
@@ -35,25 +31,18 @@ namespace Milestone1_350.Models
             int squareSpace = (int)Math.Pow(Size, 2);
             int totalAllowedBombs = (int)Math.Ceiling((decimal)squareSpace * ((decimal)Difficulty / 100));
 
-            // Create 2D array to calculate which cells are live/dead
             Random rand = new Random();
             bool[] liveCells = new bool[squareSpace];
-
-            // Setup and populate sorting set, used to randomize the liveCells array
             Double[] sortOrder = new Double[squareSpace];
             for (int idx = 0; idx < sortOrder.Length; idx++)
                 sortOrder[idx] = rand.NextDouble();
             for (int idx = 0; idx < squareSpace; idx++)
             {
-                // guarantee that all allowed bombs are set
-                // in accord with the difficulty setting
                 liveCells[idx] = idx < totalAllowedBombs;
             }
 
-            // Randomize the liveCells placement through sortOrder
             Array.Sort(sortOrder, liveCells);
 
-            // Now iter through 2D array and initialize all cells
             int liveCellSeedIdx = 0;
             for (int row = 0; row < Grid.GetLength(0); row++)
             {
@@ -64,7 +53,6 @@ namespace Milestone1_350.Models
                 }
             }
 
-            // Make a second pass over the Grid and calculate all live neighbors for each cell
             CalculateLiveNeighbors();
         }
 
@@ -81,15 +69,12 @@ namespace Milestone1_350.Models
 
         private void CalculateLiveCellNeighbors(CellModel c)
         {
-            // Set to 0 automatically, per rules, if cell itself is live
             if (c.Live)
             {
                 c.LiveNeighbors = 9;
                 return;
             }
 
-            // test if any array index is going to cause out-of-bounds errs
-            // If it would, just add a default (!Live && LiveNeighbors == 0)
             CellModel def = new CellModel(0, 0, false, false, 0);
             CellModel left = (c.Column - 1 >= 0) ? Grid[c.Row, c.Column - 1] : def;
             CellModel right = (c.Column + 1 < Size) ? Grid[c.Row, c.Column + 1] : def;
@@ -117,46 +102,24 @@ namespace Milestone1_350.Models
         {
             if (!Grid[r, c].Visited && isSafeCell(r, c))
             {
-                // Mark grid element as visited
                 Grid[r, c].Visited = true;
-                // Recursively check all compass directions
-                if (isSafeCell(r - 1, c))
-                {
-                    if (Grid[r - 1, c].LiveNeighbors == 0) floodFill(r - 1, c); // N
-                    else Grid[r - 1, c].Visited = true; // reach to next and flip it to visited
-                }
-                if (isSafeCell(r, c + 1))
-                {
-                    if (Grid[r, c + 1].LiveNeighbors == 0) floodFill(r, c + 1); // E
-                    else Grid[r, c + 1].Visited = true;
-                }
-                if (isSafeCell(r + 1, c))
-                {
-                    if (Grid[r + 1, c].LiveNeighbors == 0) floodFill(r + 1, c); // S
-                    else Grid[r + 1, c].Visited = true;
-                }
-                if (isSafeCell(r, c - 1))
-                {
-                    if (Grid[r, c - 1].LiveNeighbors == 0) floodFill(r, c - 1); // W
-                    else Grid[r, c - 1].Visited = true;
-                }
+                if (isSafeCell(r - 1, c)) { if (Grid[r - 1, c].LiveNeighbors == 0) floodFill(r - 1, c); else Grid[r - 1, c].Visited = true; }
+                if (isSafeCell(r, c + 1)) { if (Grid[r, c + 1].LiveNeighbors == 0) floodFill(r, c + 1); else Grid[r, c + 1].Visited = true; }
+                if (isSafeCell(r + 1, c)) { if (Grid[r + 1, c].LiveNeighbors == 0) floodFill(r + 1, c); else Grid[r + 1, c].Visited = true; }
+                if (isSafeCell(r, c - 1)) { if (Grid[r, c - 1].LiveNeighbors == 0) floodFill(r, c - 1); else Grid[r, c - 1].Visited = true; }
             }
-            return;
         }
 
         public bool AllSafeTilesVisited()
         {
-            int rows = Grid.GetLength(0);
-            int cols = Grid.GetLength(1);
-            bool someUnvisited = false;
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < Grid.GetLength(0); row++)
             {
-                for (int col = 0; col < cols; col++)
+                for (int col = 0; col < Grid.GetLength(1); col++)
                 {
-                    if (!Grid[row, col].Visited && !Grid[row, col].Live) someUnvisited = true;
+                    if (!Grid[row, col].Visited && !Grid[row, col].Live) return false;
                 }
             }
-            return !someUnvisited;
+            return true;
         }
     }
 }
