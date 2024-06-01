@@ -8,53 +8,56 @@ namespace Milestone1_350.Controllers
 {
     public class MinesweeperController : Controller
     {
-        static List<ButtonModel> buttons = new List<ButtonModel>();
-        Random random = new Random();
-        const int GRID_SIZE = 36;
-        BoardModel gameBoard = HomeController.gameBoard;
+        static BoardModel gameBoard;
 
 
-
-
-        public IActionResult Index()
+        public IActionResult InitializeGame(int size = 16, int difficulty = 20)
         {
-            buttons = new List<ButtonModel>();
-
-            for (int row = 0; row < gameBoard.Grid.GetLength(0); row++)
-            {
-                for (int col = 0; col < gameBoard.Grid.GetLength(1); col++)
-                {
-                    int n = random.Next(10);
-                    buttons.Add(new ButtonModel(row, col, 0, n));
-                }
-            }
-            return View("Index", buttons);
+            gameBoard = new BoardModel(difficulty, size);
+            return Ok(gameBoard);
         }
 
-        public IActionResult HandleButtonClick(string buttonNumber)
-        {
-            int bN = int.Parse(buttonNumber);
 
-            // only only the user to interact with a tile that is either unclicked or flagged
-            if (buttons.ElementAt(bN).ButtonState <= 1) 
+        public IActionResult HandleCellClick(int row, int col)
+        {
+            if (gameBoard == null) return BadRequest("Game not initialized.");
+
+            var cell = gameBoard.Grid[row, col];
+            if (cell.Live)
             {
-                // if the tile is at the default button state then place the flag
-                if (buttons.ElementAt(bN).ButtonState == 0)
-                {
-                    buttons.ElementAt(bN).ButtonState = (buttons.ElementAt(bN).ButtonState + 1);
-                }
-                else
-                {
-                    // if the tile has already been flagged
-                    // set the button state equal to the number of neighbors (the number of bomb tiles it is touching)
-                    // 2 is added to this value to compensate for unchecked at 0, and flagged at 1
-                    // example: if the tile has NumberOfNeighbors of 1 the buttonState would be set to 3 which displays the 1.png image
-                    buttons.ElementAt(bN).ButtonState = (buttons.ElementAt(bN).NumberOfNeighbors + 2);
-                }
-                
+                // Cell contains a bomb, game over
+                return Ok(new { result = "lose", board = gameBoard });
             }
 
-            return View("Index", buttons);
+            if (cell.LiveNeighbors == 0)
+            {
+                // Perform flood fill to reveal connected safe cells
+                gameBoard.floodFill(row, col);
+            }
+            else
+            {
+                // Mark cell as visited
+                cell.Visited = true;
+            }
+
+            // Check if all non-bomb cells are visited (win condition)
+            if (gameBoard.AllSafeTilesVisited())
+            {
+                return Ok(new { result = "win", board = gameBoard });
+            }
+
+            return Ok(new { result = "continue", board = gameBoard });
+        }
+
+
+        public IActionResult FlagCell(int row, int col)
+        {
+            if (gameBoard == null) return BadRequest("Game not initialized.");
+
+            var cell = gameBoard.Grid[row, col];
+            cell.Flagged = !cell.Flagged;
+
+            return Ok(new { result = "continue", board = gameBoard });
         }
     }
 }
