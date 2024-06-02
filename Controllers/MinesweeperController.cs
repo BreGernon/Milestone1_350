@@ -12,8 +12,6 @@ namespace Milestone1_350.Controllers
         BoardModel gameBoard = HomeController.gameBoard;
 
 
-
-
         public IActionResult Index()
         {
             User = new List<ButtonModel>();
@@ -22,7 +20,7 @@ namespace Milestone1_350.Controllers
             {
                 for (int col = 0; col < gameBoard.Grid.GetLength(1); col++)
                 {
-                    User.Add(new ButtonModel(row, col, 0));
+                    User.Add(new ButtonModel(row, col, 0, 0));
                 }
             }
             return View("Index", User);
