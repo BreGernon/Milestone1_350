@@ -1,64 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Milestone1_350.Controllers;
 using Milestone1_350.Models;
-using System.Collections.Generic;
-using System;
-using System.Linq;
 
 namespace Milestone1_350.Controllers
 {
     public class MinesweeperController : Controller
     {
-        static BoardModel gameBoard;
+        static List<ButtonModel> User = new List<ButtonModel>();
+        Random random = new Random();
+        const int GRID_SIZE = 36;
+        BoardModel gameBoard = HomeController.gameBoard;
 
 
-        public IActionResult InitializeGame(int size = 16, int difficulty = 20)
+
+
+        public IActionResult Index()
         {
-            gameBoard = new BoardModel(difficulty, size);
-            return Ok(gameBoard);
+            User = new List<ButtonModel>();
+
+            for (int row = 0; row < gameBoard.Grid.GetLength(0); row++)
+            {
+                for (int col = 0; col < gameBoard.Grid.GetLength(1); col++)
+                {
+                    User.Add(new ButtonModel(row, col, 0));
+                }
+            }
+            return View("Index", User);
         }
 
-
-        public IActionResult HandleCellClick(int row, int col)
+        public IActionResult HandleButtonClick(string buttonNumber)
         {
-            if (gameBoard == null) return BadRequest("Game not initialized.");
+            int bN = int.Parse(buttonNumber);
 
-            var cell = gameBoard.Grid[row, col];
-            if (cell.Live)
-            {
-                // Cell contains a bomb, game over
-                return Ok(new { result = "lose", board = gameBoard });
-            }
+            User.ElementAt(bN).ButtonState = (User.ElementAt(bN).ButtonState + 1) % 4;
 
-            if (cell.LiveNeighbors == 0)
-            {
-                // Perform flood fill to reveal connected safe cells
-                gameBoard.floodFill(row, col);
-            }
-            else
-            {
-                // Mark cell as visited
-                cell.Visited = true;
-            }
-
-            // Check if all non-bomb cells are visited (win condition)
-            if (gameBoard.AllSafeTilesVisited())
-            {
-                return Ok(new { result = "win", board = gameBoard });
-            }
-
-            return Ok(new { result = "continue", board = gameBoard });
-        }
-
-
-        public IActionResult FlagCell(int row, int col)
-        {
-            if (gameBoard == null) return BadRequest("Game not initialized.");
-
-            var cell = gameBoard.Grid[row, col];
-            cell.Flagged = !cell.Flagged;
-
-            return Ok(new { result = "continue", board = gameBoard });
+            return View("Index", User);
         }
     }
 }
-
