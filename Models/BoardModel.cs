@@ -93,21 +93,9 @@ namespace Milestone1_350.Models
             c.LiveNeighbors = liveNeighbors;
         }
 
-        private bool isSafeCell(int r, int c)
+        public bool isSafeCell(int r, int c)
         {
             return (r >= 0 && r < Size) && (c >= 0 && c < Size) && !Grid[r, c].Live && !Grid[r, c].Visited;
-        }
-
-        public void floodFill(int r, int c)
-        {
-            if (!Grid[r, c].Visited && isSafeCell(r, c))
-            {
-                Grid[r, c].Visited = true;
-                if (isSafeCell(r - 1, c)) { if (Grid[r - 1, c].LiveNeighbors == 0) floodFill(r - 1, c); else Grid[r - 1, c].Visited = true; }
-                if (isSafeCell(r, c + 1)) { if (Grid[r, c + 1].LiveNeighbors == 0) floodFill(r, c + 1); else Grid[r, c + 1].Visited = true; }
-                if (isSafeCell(r + 1, c)) { if (Grid[r + 1, c].LiveNeighbors == 0) floodFill(r + 1, c); else Grid[r + 1, c].Visited = true; }
-                if (isSafeCell(r, c - 1)) { if (Grid[r, c - 1].LiveNeighbors == 0) floodFill(r, c - 1); else Grid[r, c - 1].Visited = true; }
-            }
         }
 
         public bool AllSafeTilesVisited()
