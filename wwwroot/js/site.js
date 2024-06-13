@@ -1,7 +1,8 @@
 ﻿$(function () {
     console.log("Page is ready");
 
-    $(".game-button").click(function (event) {
+    //$(".game-button").click(function (event) {
+    $(document).on("click", ".game-button", function (event) {
         event.preventDefault();
 
         var buttonNumber = $(this).val();
