@@ -1,0 +1,21 @@
+﻿@model Milestone1_350.Models.ButtonModel
+@{
+    string[] names = { 
+        "original.png", 
+        "flag.png", 
+        "clicked.png",
+        "1.png",
+        "2.png",
+        "3.png",
+        "4.png",
+        "5.png",
+        "6.png",
+        "7.png",
+        "8.png",
+        "bomb.png"
+    };
+}
+
+    <button class="game-button" id= "button-@Model.Row-@Model.Col" value="@Model.Row-@Model.Col" name="buttonNumber" asp-controller="Minesweeper" asp-action="HandleButtonClick">
+        <img class="button-image" src="~/img/@names[Model.ButtonState]" />
+    </button>

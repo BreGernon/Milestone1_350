@@ -1,4 +1,26 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(function () {
+    console.log("Page is ready");
 
-// Write your JavaScript code.
+    $(".game-button").click(function (event) {
+        event.preventDefault();
+
+        var buttonNumber = $(this).val();
+        console.log("Game button number " + buttonNumber + " was clicked");
+        doButtonUpdate(buttonNumber);
+    });
+});
+
+function doButtonUpdate(buttonNumber) {
+    $.ajax({
+        dataType: "html",
+        method: 'POST',
+        url: '/Minesweeper/ShowOneButton',
+        data: {
+            "buttonNumber": buttonNumber
+        },
+        success: function (data) {
+            console.log("Success:", data);
+            $('#button-' + buttonNumber).html(data);
+        }
+    });
+};

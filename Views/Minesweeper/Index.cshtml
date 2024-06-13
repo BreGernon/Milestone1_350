@@ -22,47 +22,27 @@
     }
 </style>
 
-@{
-    string[] names = { 
-        "original.png", 
-        "flag.png", 
-        "clicked.png",
-        "1.png",
-        "2.png",
-        "3.png",
-        "4.png",
-        "5.png",
-        "6.png",
-        "7.png",
-        "8.png",
-        "bomb.png"
-    };
+<p>Current Time: @DateTime.Now</p>
 
 <form>
     <div class="button-container">
-
         @for (int i = 0; i < Model.Count(); i++)
         {
-            if (@i % Math.Sqrt(Model.Count()) == 0)
+            if (i % Math.Sqrt(Model.Count()) == 0)
             {
-                <div class="line-break"> </div>
+                <div class="line-break"></div>
             }
 
-            <div class="Button" id=@i>
-                <button class="button" type="submit" value=@i name="buttonNumber" asp-controller="Minesweeper" asp-action="HandleButtonClick">
-                    <img class="button-image" src="~/img/@names[Model.ElementAt(i).ButtonState]" />
-                    <div class="center">
-
-                    </div>
-                </button>
-
+            <div class="button" id="button-@i">
+                @Html.Partial("ShowOneButton", Model.ElementAt(i))
             </div>
         }
     </div>
 
     <h4>Instructions</h4>
     <p>Click once on the square to set a flag. Click a second time to reveal the square</p>
-
-
 </form>
+
+@section Scripts {
+    <script scr="~/js/site.js"></script>
 }
