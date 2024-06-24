@@ -57,6 +57,7 @@ namespace Milestone1_350.Services
                             User[j].ButtonState = 11;
                         }
                     }
+                    safeTiles = 0; // ignores the number of safe tiles becase the game has been lost
                     break;
                 }
 
@@ -70,8 +71,10 @@ namespace Milestone1_350.Services
             if (safeTiles > 0)
             {
                 return false;
-            } else
+            } 
+            else
             {
+                revealAll(User, gameBoard);
                 return true;
             }
         }
@@ -130,6 +133,15 @@ namespace Milestone1_350.Services
                     else gameBoard.Grid[r - 1, c].Visited = true;
                     for (int i = 0; i < User.Count; i++) { if (User.ElementAt(i).Row == r - 1 && User.ElementAt(i).Col == c) { User.ElementAt(i).ButtonState = User.ElementAt(i).NumberOfNeighbors + 2; } }
                 }
+            }
+        }
+
+        private void revealAll(List<ButtonModel> User, BoardModel gameBoard)
+        {
+            for (int i = 0; i < User.Count; i++)
+            {
+                // reveal the button
+                User[i].ButtonState = User[i].NumberOfNeighbors + 2;
             }
         }
     }

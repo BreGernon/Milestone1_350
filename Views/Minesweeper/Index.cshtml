@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Milestone1_350.Models.ButtonModel>
 
 <style>
-
     .button {
         width: 75px;
     }
@@ -23,9 +22,9 @@
 </style>
 
 @{
-    string[] names = { 
-        "original.png", 
-        "flag.png", 
+    string[] names = {
+        "original.png",
+        "flag.png",
         "clicked.png",
         "1.png",
         "2.png",
@@ -37,52 +36,63 @@
         "8.png",
         "bomb.png"
     };
+}
 
-                            <form>
-                                <div class="button-container">
-
-                                    @for (int i = 0; i < Model.Count(); i++)
+<form method="post">
+    <div class="button-container">
+        @for (int i = 0; i < Model.Count(); i++)
         {
             if (@i % Math.Sqrt(Model.Count()) == 0)
             {
-                                            <div class="line-break"> </div>
+                <div class="line-break"> </div>
             }
 
-                                        <div class="Button" id=@i>
-                                            <button class="button" type="submit" value=@i name="buttonNumber" asp-controller="Minesweeper" asp-action="HandleButtonClick">
-                                                <img class="button-image" src="~/img/@names[Model.ElementAt(i).ButtonState]" />
-                                                <div class="center"></div>
-                                            </button>
-                                        </div>
+            <div class="Button" id=@i>
+                <button class="button" type="submit" value=@i name="buttonNumber" asp-controller="Minesweeper" asp-action="HandleButtonClick">
+                    <img class="button-image" src="~/img/@names[Model.ElementAt(i).ButtonState]" />
+                    <div class="center"></div>
+                </button>
+            </div>
         }
-                                </div>
+    </div>
 
-                                <div>
-                                    <button type="button" onclick="saveGame()">Save Game</button>
-                                </div>
+    <div>
+        <button type="button" onclick="saveGame()">Save Game</button>
+        <button type="button" onclick="restartGame()">Restart Game</button>
+    </div>
 
-                                <h4>Instructions</h4>
-                                <p>Click once on the square to set a flag. Click a second time to reveal the square</p>
+    <h4>Instructions</h4>
+    <p>Click once on the square to set a flag. Click a second time to reveal the square</p>
+</form>
 
+<script>
+    function saveGame() {
+        fetch('/Minesweeper/SaveGame', {
+            method: 'POST'
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert('Failed to save game.');
+            }
+        }).catch(error => {
+            alert('Failed to save game.');
+        });
+    }
 
-                            </form>
-
-                            <script>
-                                function saveGame() {
-                                    fetch('/Minesweeper/SaveGame', {
-                                        method: 'POST'
-                                    }).then(response => {
-                                        return response.json();
-                                    }).then(data => {
-                                        if (data.success) {
-                                            alert(data.message);
-                                        } else {
-                                            alert('Failed to save game.');
-                                        }
-                                    }).catch(error => {
-                                        alert('Failed to save game.');
-                                    });
-                                       
-                                }
-                            </script>
-}
+    function restartGame() {
+        fetch('/Minesweeper/Restart', {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to restart game.');
+            }
+        }).catch(error => {
+            alert('Failed to restart game.');
+        });
+    }
+</script>
