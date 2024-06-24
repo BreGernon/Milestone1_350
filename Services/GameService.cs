@@ -1,10 +1,26 @@
 ﻿using Milestone1_350.Models;
+using System.Data.SqlClient;
+using System.Text.Json;
 
 namespace Milestone1_350.Services
 {
     public class GameService
     {
+        private readonly string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog = minesweeper; Integrated Security = True; Connect Timeout = 30;";
         public GameService() { }
+
+        public void SaveGameState(List<ButtonModel> gameState)
+        {
+            var serializedGameState = JsonSerializer.Serialize(gameState);
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("INSERT INTO SavedGames (GameState) VALUES (@GameState)", connection);
+                command.Parameters.AddWithValue("@GameState", serializedGameState);
+                command.ExecuteNonQuery();
+            }
+        }
 
         public List<ButtonModel> revealSquare(List<ButtonModel> User, BoardModel gameBoard, int bN)
         {

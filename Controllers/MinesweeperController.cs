@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Milestone1_350.Controllers;
 using Milestone1_350.Models;
 using Milestone1_350.Services;
+using System.Text.Json;
 
 namespace Milestone1_350.Controllers
 {
@@ -45,6 +46,16 @@ namespace Milestone1_350.Controllers
             }
 
             return View("Index", User);
+        }
+
+        [HttpPost]
+        public IActionResult SaveGame()
+        {
+            var gameState = JsonSerializer.Serialize(User);
+
+            gs.SaveGameState(User);
+
+            return Json(new { success = true, message = "Game saved successfully!" });
         }
     }
 }
